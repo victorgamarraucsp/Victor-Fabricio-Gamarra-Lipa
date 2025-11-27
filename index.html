@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portafolio de Gamarra — Programación, videojuegos indie, diseño creativo y más.">
+  <meta name="keywords" content="Gamarra, programación, videojuegos, indie games, portafolio, desarrollo de juegos, Godot, pixel art">
+  <meta name="author" content="Gamarra">
+  <title>Gamarra — Portafolio</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap">
+  <style>
+    :root {
+      --bg1: #000000;
+      --bg2: #1a1a1a;
+      --accent1: #ffffff;
+      --accent2: #e0e0e0;
+      --shadow: rgba(255, 255, 255, 0.2);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--bg1), var(--bg2) 70%);
+      color: var(--accent1);
+      scroll-behavior: smooth;
+      line-height: 1.6;
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    canvas#particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    /* Animación de fondo elegante */
+    .floating-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .floating-element {
+      position: absolute;
+      border: 1px solid var(--accent2);
+      border-radius: 50%;
+      opacity: 0.1;
+      filter: blur(1px);
+      animation: float 20s infinite linear;
+    }
+
+    .floating-element:nth-child(1) {
+      width: 120px;
+      height: 120px;
+      top: 10%;
+      left: 5%;
+      border-color: var(--accent1);
+      box-shadow: 0 0 15px var(--accent1);
+      animation-delay: 0s;
+    }
+
+    .floating-element:nth-child(2) {
+      width: 80px;
+      height: 80px;
+      top: 70%;
+      left: 10%;
+      border-color: var(--accent2);
+      box-shadow: 0 0 15px var(--accent2);
+      animation-delay: -5s;
+    }
+
+    .floating-element:nth-child(3) {
+      width: 150px;
+      height: 150px;
+      top: 20%;
+      right: 5%;
+      border-color: var(--accent1);
+      box-shadow: 0 0 15px var(--accent1);
+      animation-delay: -10s;
+    }
+
+    .floating-element:nth-child(4) {
+      width: 100px;
+      height: 100px;
+      top: 60%;
+      right: 10%;
+      border-color: var(--accent2);
+      box-shadow: 0 0 15px var(--accent2);
+      animation-delay: -15s;
+    }
+
+    .floating-element:nth-child(5) {
+      width: 90px;
+      height: 90px;
+      top: 40%;
+      left: 20%;
+      border-color: var(--accent1);
+      box-shadow: 0 0 15px var(--accent1);
+      animation-delay: -7s;
+    }
+
+    .floating-element:nth-child(6) {
+      width: 130px;
+      height: 130px;
+      top: 50%;
+      right: 20%;
+      border-color: var(--accent2);
+      box-shadow: 0 0 15px var(--accent2);
+      animation-delay: -12s;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate(20px, 30px) rotate(90deg);
+      }
+      50% {
+        transform: translate(0, 60px) rotate(180deg);
+      }
+      75% {
+        transform: translate(-20px, 30px) rotate(270deg);
+      }
+    }
+
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    header {
+      background-color: rgba(0, 0, 0, 0.9);
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    header h1 {
+      font-size: 1.7rem;
+      color: var(--accent1);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    nav a {
+      color: var(--accent2);
+      margin-left: 1.5rem;
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    nav a:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background-color: var(--accent1);
+      transition: var(--transition);
+    }
+
+    nav a:hover {
+      color: var(--accent1);
+    }
+
+    nav a:hover:after {
+      width: 100%;
+    }
+
+    section {
+      padding: 4rem 2rem;
+      max-width: 1000px;
+      margin: auto;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero {
+      text-align: center;
+      padding-top: 5rem;
+    }
+
+    .hero img {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--accent1);
+      margin-bottom: 1rem;
+      transition: var(--transition);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+
+    .hero img:hover {
+      transform: scale(1.15) rotate(5deg);
+      box-shadow: 0 0 28px rgba(255, 255, 255, 0.4);
+    }
+
+    .hero h2 {
+      font-size: 2.3rem;
+      margin-bottom: 0.7rem;
+      color: var(--accent1);
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      opacity: 0.9;
+    }
+
+    .grid {
+      margin-top: 1.5rem;
+      list-style: none;
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .grid li {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 1.5rem;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.5);
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .grid li:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 24px var(--shadow);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .grid a {
+      color: var(--accent1);
+      text-decoration: none;
+      font-weight: bold;
+      transition: var(--transition);
+      display: inline-block;
+    }
+
+    .grid a:hover {
+      color: var(--accent2);
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background-color: rgba(0, 0, 0, 0.9);
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.6);
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    footer p {
+      opacity: 0.85;
+    }
+
+    h2 {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+    }
+
+    h2:after {
+      content: '';
+      position: absolute;
+      width: 60px;
+      height: 3px;
+      background-color: var(--accent1);
+      bottom: 0;
+      left: 0;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+      nav a {
+        margin: 0 0.7rem;
+      }
+      .hero h2 {
+        font-size: 1.8rem;
+      }
+      .floating-element {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Canvas para partículas -->
+  <canvas id="particles"></canvas>
+
+  <!-- Fondo elegante -->
+  <div class="floating-elements">
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+  </div>
+
+  <header>
+    <h1>Gamarra</h1>
+    <nav>
+      <a href="#sobre-mi">Sobre mí</a>
+      <a href="#gustos">Gustos</a>
+      <a href="#contacto">Contacto</a>
+      <a href="#companeros">Compañeros</a>
+      <a href="#profesores">Profesores</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&h=200&q=80" alt="Foto de Gamarra">
+    <h2>¡Soy Gamarra!</h2>
+    <p>Programación, videojuegos indie, historias profundas y música 🎮🎵</p>
+  </section>
+
+  <section id="sobre-mi">
+    <h2>Sobre mí</h2>
+    <p>Soy alguien curioso, reflexivo e imaginativo. Combino lo técnico con lo creativo: programación, diseño de videojuegos, narrativa y música.</p>
+    <p>Edad: 19 años</p>
+    <p>Formación académica: Estudiante de Ciencias de la Computación - Universidad Católica San Pablo</p>
+    <p>Ocupación: Estudiante</p>
+    <p>Ciudad: Arequipa, Perú</p>
+  </section>
+
+  <section id="gustos">
+    <h2>Mis gustos</h2>
+    <ul class="grid">
+      <li>🎮 Indies: Nine Sols, Hollow Knight, Hyper Light Drifter, Castlevania</li>
+      <li>🎵 Música: Jazz, J-pop (Ado, Natori, Yoasobi), OSTs</li>
+      <li>💻 Programación, engines y diseño de juegos</li>
+      <li>📚 Historias profundas como Omori o Dentro del bosque</li>
+      <li>🎨 Pixel art y diseño gráfico minimalista</li>
+      <li>📖 Narrativa interactiva y desarrollo de personajes</li>
+    </ul>
+  </section>
+
+  <section id="contacto">
+    <h2>Contacto</h2>
+    <ul class="grid">
+      <li><a href="https://github.com/Gamarra" target="_blank">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/gamarra" target="_blank">LinkedIn</a></li>
+      <li><a href="mailto:gamarra@gmail.com">Correo</a></li>
+    </ul>
+  </section>
+
+  <!-- Lista completa de compañeros -->
+  <section id="companeros">
+    <h2>Compañeros</h2>
+    <ul class="grid">
+      <li><a href="https://marializcadenashullicapacco.github.io/pagina-web/" target="_blank">Marialit Caderas Multiaparco</a><br><a href="https://www.linkedin.com/in/marializcadenashullicapacco/" target="_blank">LinkedIn</a></li>
+      <li><a href="https://traicypacocoolque.github.io/" target="_blank">Tracy Pároz Colaga</a><br><a href="https://www.linkedin.com/in/traicy-pacco-colque-01469b386/" target="_blank">LinkedIn</a></li>
+      <li><a href="https://svr-glitch.github.io/SANTIAGO-VELASCO-RIVERA/" target="_blank">Santiago Jánchez Rivera</a><br><a href="https://www.linkedin.com/in/santiago-velasco-rivera/" target="_blank">LinkedIn</a></li>
+      <li><a href="https://chaskacandia.github.io/chaskacandiaochoa.github.io/" target="_blank">Chasta Carola Ochoa</a><br><a href="https://www.linkedin.com/in/chaska-candia-ochoa-277079386/" target="_blank">LinkedIn</a></li>
+      <li><a href="https://deza-ccama.github.io/marilyn-shiomara-deza-ccama/" target="_blank">Marilyn Sivonara Dora Canna</a><br><a href="https://www.linkedin.com/in/marilyn-shiomara-deza-ccama-b7a191335" target="_blank">LinkedIn</a></li>
+      <li><a href="https://angelabecerra-jpg.github.io/pagina-web/" target="_blank">Angola Becerra Amado</a><br><a href="https://www.linkedin.com/in/angela-becerra-Ob6ab6345/" target="_blank">LinkedIn</a></li>
+      <li><a href="https://gustavorodriguezrodriguez.github.io/pagina-web/" target="_blank">Guardo Rodrigues Rodriguez</a><br>LinkedIn: No disponible</li>
+      <li><a href="https://hectorrodriguez17.github.io/mywebhr/" target="_blank">Héctor Ricardo Rodríguez García</a><br><a href="https://www.linkedin.com/in/hector-ricardo-rodriguez-gaytan-76639437b" target="_blank">LinkedIn</a></li>
+      <li><a href="https://greciamunoz-sys.github.io/Grecia-Arianne-Consuelo-Munoz-Ventur" target="_blank">Grecia Consuelo Muñoz</a><br>LinkedIn: No disponible</li>
+      <li><a href="https://katerineangelahuaycaniturpo.github.io/pagina-web/" target="_blank">Katrina Fraga Huancura Turno</a><br>LinkedIn: No disponible</li>
+      <li><a href="https://juanquispepandia-code.github.io/" target="_blank">Juan Daniel López-Paneta</a><br>LinkedIn: No disponible</li>
+      <li><a href="https://cesarluisgonzalesmeneses.github.io/paginaweb/" target="_blank">Coas-Lí del González Menezes</a><br>LinkedIn: No disponible</li>
+      <li><a href="https://santiagovaldiviezo10.github.io/santiagovaldiviezo" target="_blank">Tomi Santiago Valdivisco Guardia</a><br><a href="https://pe.linkedin.com/in/santiago-valdiviezo-1a4baa380" target="_blank">LinkedIn</a></li>
+      <li><a href="https://valeriegallardo.github.io/valeriegallardo/" target="_blank">Valerio Gallardo</a><br>LinkedIn: No disponible</li>
+      <li><a href="https://rodrigomolinap.github.io/RodrigoMolinaP-web/" target="_blank">Rodrigo Molina Portocarrero</a><br>LinkedIn: No disponible</li>
+      <li><a href="https://owenvh.github.io" target="_blank">Diogo Kurt Vidarani Checco</a><br><a href="https://www.linkedin.com/in/owen-kurt-vlicarani-checca" target="_blank">LinkedIn</a></li>
+      <li><a href="https://pari-dot.github.io/Mauricio.github.io/" target="_blank">Mauricio Joel Pati Gomez</a><br><a href="https://www.linkedin.com/in/mauricio-joe-parl-gomez-5b234a380/" target="_blank">LinkedIn</a></li>
+      <li><a href="https://roaldmacedoboza.github.io/roaldmacedo.github.io" target="_blank">Macedo Rena Roald</a><br><a href="https://www.linkedin.com/in/roald-macedo-boza-a466a4385" target="_blank">LinkedIn</a></li>
+      <li><a href="https://flavianicaeladiazzevallos1.github.io/" target="_blank">Flávia Wissada Dica Zavalios</a><br><a href="https://www.linkedin.com/in/flavia-micaela-d%C3%ADaz-zevallos" target="_blank">LinkedIn</a></li>
+      <li><a href="https://jorgecastro-sudo.github.io/Jorge-David-castro-quispe-/" target="_blank">Jorge David Castro Quique</a><br>LinkedIn: No disponible</li>
+      <li><a href="https://josecalizaya-cmyk.github.io/joseluiscalizayachura.github.io/" target="_blank">Leandro Carlos Valdivis Rosa</a><br><a href="https://www.linkedin.com/in/jose-luis-aldair-calizaya-chura-90a23b392/" target="_blank">LinkedIn</a></li>
+      <li><a href="https://leaovaldiviarivas.github.io/leandro-carlos-valdivia-rivas/" target="_blank">Afrika Emily Valencia Pinho</a><br>LinkedIn: No disponible</li>
+      <li><a href="https://arivalencia2025.github.io/Ariana Emily Valencia.github.io/" target="_blank">Solen Goldmannani Haumanzhulu</a><br><a href="https://www.linkedin.com/in/ariana-emily-valencia-pati%C3%B1o-ba0135387/" target="_blank">LinkedIn</a></li>
+      <li><a href="https://cielogrp.github.io/Cielo-Geraldine-Romero-Pe-a/" target="_blank">Selena Goldmannani Haumanzhulu</a><br><a href="https://www.linkedin.com/in/cielo-geraldine-89a196387" target="_blank">LinkedIn</a></li>
+      <li><a href="https://selenaccallomamani.github.io/selena.ccallomamani.github.io/" target="_blank">Selena Goldmannani Haumanzhulu</a><br><a href="https://www.linkedin.com/in/selena-ccallomamani-huaman%C3%B1ahui-6b0364311" target="_blank">LinkedIn</a></li>
+    </ul>
+  </section>
+
+  <section id="profesores">
+    <h2>Profesores</h2>
+    <ul class="grid">
+      <li>Jorge Lovón Caparó — jlovonc@ucsp.edu.pe</li>
+      <li>Erick Mauricio Gómez Nieto — emgomez@ucsp.edu.pe</li>
+      <li>Kelly Vizconde La Motta — kvizconde@ucsp.edu.pe</li>
+      <li>Rosmery Violeta Quispe Zavala — rvquispe@ucsp.edu.pe</li>
+      <li>Pierina Pacheco Leyton — ppacheco@ucsp.edu.pe</li>
+      <li>Jorge Lovón Caparó — jlovonc@ucsp.edu.pe</li>
+      <li>Ernesto Cuadros Vargas — ecuadros@ucsp.edu.pe</li>
+      <li>Yanet Silvana Chirinos Avilés — ychirinos@ucsp.edu.pe</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>© 2025 Gamarra — "Si lo puedes imaginar, lo puedes programar."</p>
+  </footer>
+
+  <script>
+    // --- CONFIGURACIÓN DEL CANVAS ---
+    const canvas = document.getElementById("particles");
+    const ctx = canvas.getContext("2d");
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    // --- PARTÍCULAS ---
+    const particles = [];
+    const PARTICLE_COUNT = 80;
+    const MAX_DISTANCE = 130;
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2 + 1.2,
+        speedX: (Math.random() - 0.5) * 0.4,
+        speedY: (Math.random() - 0.5) * 0.4,
+        hueShift: Math.random() * 360 // Cada partícula inicia en un tono distinto
+      });
+    }
+
+    // --- ANIMACIÓN ---
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((p, i) => {
+        // Movimiento
+        p.x += p.speedX;
+        p.y += p.speedY;
+
+        // Bordes
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+
+        // Color blanco/gris para las partículas
+        const opacity = 0.7 + Math.sin(p.hueShift * 0.02) * 0.3;
+        ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Líneas entre partículas cercanas ("web de luz")
+        for (let j = i + 1; j < particles.length; j++) {
+          let p2 = particles[j];
+          const dx = p.x + -p2.x;
+          const dy = p.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < MAX_DISTANCE) {
+            let opacity = 1 - dist / MAX_DISTANCE;
+            ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.3})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        }
+      });
+
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // --- ANIMACIÓN DE APARICIÓN AL SCROLL ---
+    const sections = document.querySelectorAll("section");
+
+    function checkVisible() {
+      const trigger = window.innerHeight * 0.85;
+
+      sections.forEach(sec => {
+        const top = sec.getBoundingClientRect().top;
+        if (top < trigger) sec.classList.add("visible");
+      });
+    }
+    window.addEventListener("scroll", checkVisible);
+    checkVisible();
+  </script>
+</body>
+</html>
